@@ -1,35 +1,17 @@
 import React from 'react';
-import Image from 'next/image'; // Import next/image for optimized images
+import Image from 'next/image'; // Re-enable Image import
 import Swal from 'sweetalert2'; // Import SweetAlert2
 
 interface CardProps {
   title: string;
   description: string;
-  imageUrl: string;
-  category: string;
+  imageUrl: string; // <-- Re-add this
+  sourceName: string; // Add sourceName prop
+  date: string;       // Add date prop (formatted string)
   link: string; // Add link prop for the source URL
 }
 
-// Helper function to determine border color based on category
-const getCategoryBorderColor = (category: string): string => {
-  // Simple example: assign colors based on category initial letter or name
-  // You can expand this logic
-  switch (category.toLowerCase()) {
-    case 'a':
-      return 'border-l-blue-500';
-    case 'b':
-      return 'border-l-green-500';
-    case 'c':
-      return 'border-l-red-500';
-    case 'v':
-      return 'border-l-yellow-500';
-    default:
-      return 'border-l-gray-500';
-  }
-};
-
-const Card: React.FC<CardProps> = ({ title, description, imageUrl, category, link }) => {
-  const borderColorClass = getCategoryBorderColor(category);
+const Card: React.FC<CardProps> = ({ title, description, imageUrl, sourceName, date, link }) => {
 
   // Function to handle card click
   const handleCardClick = () => {
@@ -54,31 +36,30 @@ const Card: React.FC<CardProps> = ({ title, description, imageUrl, category, lin
   };
 
   return (
+    // Update card container style: remove background, border, shadow, hover effects. Add padding and bottom border.
     <div 
-      className={`
-        bg-white rounded-lg shadow-md overflow-hidden mb-4 
-        border-l-4 ${borderColorClass} 
-        transition duration-300 ease-in-out 
-        hover:shadow-xl hover:scale-105
-        cursor-pointer // Add cursor pointer to indicate clickability
-      `}
-      onClick={handleCardClick} // Add onClick handler to the div
+      className="p-4 mb-4 border-b border-gray-200 cursor-pointer" 
+      onClick={handleCardClick} 
     >
-      <div className="relative h-40 w-full">
-        <Image 
-          src={imageUrl} 
-          alt={title} 
-          layout="fill" 
+      {/* Re-add the image section */}
+      <div className="relative h-52 w-full mb-3 rounded-lg overflow-hidden">
+        <Image
+          src={imageUrl}
+          alt={title}
+          layout="fill"
           objectFit="cover"
-          className="opacity-80"
         />
       </div>
-      <div className="p-5">
-        <h3 className="text-xl font-bold mb-2 text-gray-800">{title}</h3>
-        <p className="text-gray-700 text-base mb-3 line-clamp-3">{description}</p> {/* Limit description lines */}
-        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-          #{category}
-        </span>
+      
+      {/* Content section */}
+      <div>
+        {/* Source Name */}
+        <p className="text-xs font-semibold uppercase text-gray-500 mb-1">{sourceName}</p>
+        {/* Title */}
+        <h3 className="text-xl font-bold mb-2 text-gray-900 leading-tight">{title}</h3>
+        {/* Date/Timestamp */}
+        <p className="text-sm text-gray-500">{date}</p>
+        {/* Description is now shown only in the popup */}
       </div>
     </div>
   );
